@@ -27,7 +27,7 @@ const onFrame = (sperm: Sperm) => () => {
     Key.isDown('down') && sperm.reverse()
 
     sperm.draw()
-    //sperm.constrain()
+    sperm.constrain()
 }
 
 const onKeyDown = (sperm: Sperm) => (event: KeyEvent) => {
@@ -48,8 +48,6 @@ const createSperm = (): Sperm => {
     for (let i = 0; i < size; i++) {
         path.add(new Point(center.x - i * partLength, center.y))
     }
-
-    //path.strokeColor = 'black'
 
     const headPath = new Path.Ellipse({
         from: [0, 0],
@@ -84,7 +82,6 @@ const createSperm = (): Sperm => {
                 }
                 speed *= friction
             }
-            // console.log(`angle ${vector.angle}`)
         },
         right: () => {
             if (speed >= 0.01) {
@@ -97,30 +94,25 @@ const createSperm = (): Sperm => {
                 }
                 speed *= friction
             }
-            // console.log(`angle ${vector.angle}`)
         },
 
         forward: () => {
             speed += 0.3
             speed = Math.min(maxSpeed, speed)
-            // console.log(`angle ${vector.angle}`)
         },
 
         reverse: () => {
             speed -= 0.3
             if (speed < minSpeed) speed = minSpeed
-            // console.log(`angle ${vector.angle}`)
         },
 
         draw: () => {
-            var vec = vector.normalize(Math.abs(speed))
+            const vec = vector.normalize(Math.abs(speed))
             speed = speed * friction
             position = addPoints(vec, position)
-            var lastPoint = (path.firstSegment.point = position)
-            var lastVector = vec
-            var segments = path.segments
-            for (var i = 1, l = segments.length; i < l; i++) {
-                var segment = segments[i]
+            let lastPoint = (path.firstSegment.point = position)
+            let lastVector = vec
+            path.segments.map((segment, i) => {
                 var vector2 = substractPoints(lastPoint, segment.point)
                 count += vec.length * 10
                 var rotLength = Math.sin((count + i * 3) / 600)
@@ -138,11 +130,9 @@ const createSperm = (): Sperm => {
                     lastRotation = rotation
                 }
                 lastVector = vector2
-            }
+            })
             path.smooth()
-            //console.log(`speed ${speed}`)
             console.log(position)
-            //this.constrain()
         },
 
         constrain: () => {
@@ -166,7 +156,6 @@ const begin = () => {
     const canvas: HTMLCanvasElement = document.getElementById('myCanvas') as HTMLCanvasElement
     setup(canvas)
     const sperm = createSperm()
-    // sperm()
     view.onFrame = onFrame(sperm)
     const tool1 = new Tool()
     tool1.onKeyDown = onKeyDown(sperm)
