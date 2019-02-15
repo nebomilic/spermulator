@@ -1,4 +1,15 @@
-import { Path, Point, view, setup, project, PlacedSymbol, Symbol, KeyEvent, Tool } from 'paper'
+import {
+    Path,
+    Point,
+    view,
+    setup,
+    project,
+    PlacedSymbol,
+    Symbol,
+    KeyEvent,
+    Tool,
+    Key
+} from 'paper'
 
 interface Sperm {
     left: Function
@@ -10,18 +21,17 @@ interface Sperm {
 }
 
 const onFrame = (sperm: Sperm) => () => {
+    Key.isDown('left') && sperm.left()
+    Key.isDown('right') && sperm.right()
+    Key.isDown('up') && sperm.forward()
+    Key.isDown('down') && sperm.reverse()
+
     sperm.draw()
+    //sperm.constrain()
 }
 
 const onKeyDown = (sperm: Sperm) => (event: KeyEvent) => {
-    // Prevent the arrow keys from scrolling the window:
     event.preventDefault()
-    if (event.key === 'left') sperm.left()
-    if (event.key === 'right') sperm.right()
-    if (event.key === 'up') sperm.forward()
-    if (event.key === 'down') sperm.reverse()
-    return false
-    //return !/left|right|up|down/.test(event.key)
 }
 
 const createSperm = (): Sperm => {
@@ -74,7 +84,7 @@ const createSperm = (): Sperm => {
                 }
                 speed *= friction
             }
-            console.log(`angle ${vector.angle}`)
+            // console.log(`angle ${vector.angle}`)
         },
         right: () => {
             if (speed >= 0.01) {
@@ -87,25 +97,25 @@ const createSperm = (): Sperm => {
                 }
                 speed *= friction
             }
-            console.log(`angle ${vector.angle}`)
+            // console.log(`angle ${vector.angle}`)
         },
 
         forward: () => {
             speed += 0.3
             speed = Math.min(maxSpeed, speed)
-            console.log(`angle ${vector.angle}`)
+            // console.log(`angle ${vector.angle}`)
         },
 
         reverse: () => {
             speed -= 0.3
             if (speed < minSpeed) speed = minSpeed
-            console.log(`angle ${vector.angle}`)
+            // console.log(`angle ${vector.angle}`)
         },
 
         draw: () => {
             var vec = vector.normalize(Math.abs(speed))
             speed = speed * friction
-            position == addPoints(vec, position)
+            position = addPoints(vec, position)
             var lastPoint = (path.firstSegment.point = position)
             var lastVector = vec
             var segments = path.segments
@@ -130,6 +140,8 @@ const createSperm = (): Sperm => {
                 lastVector = vector2
             }
             path.smooth()
+            //console.log(`speed ${speed}`)
+            console.log(position)
             //this.constrain()
         },
 
