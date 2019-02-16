@@ -8,7 +8,7 @@ const onFrame = (sperm: Sperm) => () => {
     Key.isDown('down') && sperm.reverse()
 
     sperm.draw()
-    sperm.constrain()
+    //sperm.constrain()
 }
 
 const onKeyDown = (sperm: Sperm) => (event: KeyEvent) => {
