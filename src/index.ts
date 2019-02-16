@@ -22,9 +22,9 @@ const begin = () => {
     setup(canvas)
     const sperm = createSperm()
     view.onFrame = onFrame(sperm)
-    const tool1 = new Tool()
-    tool1.onKeyDown = onKeyDown(sperm)
-    tool1.activate()
+    const tool = new Tool()
+    tool.onKeyDown = onKeyDown(sperm)
+    tool.activate()
     view.draw()
 }
 
