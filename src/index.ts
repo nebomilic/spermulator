@@ -6,9 +6,7 @@ const onFrame = (sperm: Sperm) => () => {
     Key.isDown('right') && sperm.right()
     Key.isDown('up') && sperm.forward()
     Key.isDown('down') && sperm.reverse()
-
     sperm.draw()
-    //sperm.constrain()
 }
 
 const onKeyDown = (sperm: Sperm) => (event: KeyEvent) => {
