@@ -19,8 +19,8 @@ const HEAD_WIDTH = 8
 const MIN_SPEED = 1
 const MAX_SPEED = 5
 const FRICTION = 0.98
-const STEERING = 1.5
-const MAX_STEER = 4.5
+const STEERING = 0.5
+const MAX_STEER = 1.5
 
 const createSperm = (): Sperm => {
     project.currentStyle = {
@@ -101,10 +101,10 @@ const createSperm = (): Sperm => {
             let lastPoint = (path.firstSegment.point = position)
             let lastVector = vec
             path.segments.map((segment, i) => {
-                var vector2 = substractPoints(lastPoint, segment.point)
+                const vector2 = substractPoints(lastPoint, segment.point)
                 count += vec.length * 10
-                var rotLength = Math.sin((count + i * 3) / 600)
-                var rotated = lastVector.rotate(90).normalize(rotLength)
+                const rotLength = Math.sin((count + i * 3) / 600)
+                const rotated = lastVector.rotate(90).normalize(rotLength)
                 lastPoint = segment.point = addPoints(
                     lastPoint,
                     lastVector.normalize(-partLength - vec.length / 10)
@@ -113,7 +113,7 @@ const createSperm = (): Sperm => {
 
                 if (i == 1) {
                     head.position = position
-                    var rotation = vector2.angle
+                    const rotation = vector2.angle
                     head.rotate(rotation - lastRotation)
                     lastRotation = rotation
                 }
@@ -124,8 +124,8 @@ const createSperm = (): Sperm => {
         },
 
         constrain: () => {
-            var bounds = path.bounds
-            var size = view.size
+            const bounds = path.bounds
+            const size = view.size
             if (!bounds.intersects(view.bounds)) {
                 if (position.x < -bounds.width) position.x = size.width + bounds.width
                 if (position.y < -bounds.height) position.y = size.height + bounds.height
