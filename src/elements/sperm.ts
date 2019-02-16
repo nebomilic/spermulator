@@ -10,16 +10,28 @@ interface Sperm {
     constrain: Function
 }
 
+const SPERM_COLOR = 'white'
+const STROKE = 2
+const TAIL_SEGMENT_COUNT = 20
+const TAIL_PART_LENGTH = 5
+const HEAD_LENGTH = 13
+const HEAD_WIDTH = 8
+const MIN_SPEED = 1
+const MAX_SPEED = 5
+const FRICTION = 0.98
+const STEERING = 1.5
+const MAX_STEER = 4.5
+
 const createSperm = (): Sperm => {
     project.currentStyle = {
-        strokeColor: 'black',
-        strokeWidth: 4,
-        strokeCap: 'round'
+        strokeColor: SPERM_COLOR,
+        strokeWidth: STROKE,
+        strokeCap: SPERM_COLOR
     }
 
     const center = view.center
-    const size = 20
-    const partLength = 5
+    const size = TAIL_SEGMENT_COUNT
+    const partLength = TAIL_PART_LENGTH
     const path = new Path()
     for (let i = 0; i < size; i++) {
         path.add(new Point(center.x - i * partLength, center.y))
@@ -27,9 +39,9 @@ const createSperm = (): Sperm => {
 
     const headPath = new Path.Ellipse({
         from: [0, 0],
-        to: [13, 8],
-        fillColor: 'black',
-        strokeColor: 'black'
+        to: [HEAD_LENGTH, HEAD_WIDTH],
+        fillColor: SPERM_COLOR,
+        strokeColor: SPERM_COLOR
     })
     headPath.scale(1.3)
     const head = new PlacedSymbol(new Symbol(headPath))
@@ -37,12 +49,12 @@ const createSperm = (): Sperm => {
         angle: 0,
         length: 20
     })
-    const maxSteer = 4.5
-    const friction = 0.98
-    const steering = 1.5
-    const maxSpeed = 10
-    const minSpeed = 1
-    let speed = 1
+    const maxSteer = MAX_STEER
+    const friction = FRICTION
+    const steering = STEERING
+    const maxSpeed = MAX_SPEED
+    const minSpeed = MIN_SPEED
+    let speed = minSpeed
     let position = center
     let lastRotation = 0
     let count = 0

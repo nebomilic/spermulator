@@ -17,6 +17,8 @@ const onKeyDown = (sperm: Sperm) => (event: KeyEvent) => {
 
 const begin = () => {
     const canvas: HTMLCanvasElement = document.getElementById('myCanvas') as HTMLCanvasElement
+    canvas.width = window.innerWidth
+    canvas.height = window.innerHeight
     setup(canvas)
     const sperm = createSperm()
     view.onFrame = onFrame(sperm)

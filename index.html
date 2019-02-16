@@ -3,9 +3,17 @@
 
 <head>
 	<meta charset="UTF-8" />
-	<title>Template</title>
+	<title>Spermulator</title>
 	<!-- Dependencies -->
-	<script src="./node_modules/paper/dist/paper-full.min.js"></script>
+	<script src="./dist/libs/paper/paper-full.min.js"></script>
+	<style>
+		html,
+		body,
+		canvas {
+			background-color: black;
+			overflow: hidden;
+		}
+	</style>
 
 	<!-- Main -->
 	<script src="./dist/bundle.js"></script>
@@ -13,7 +21,7 @@
 
 <body>
 	<div id="container">
-		<canvas id="myCanvas" width="800" height="600"></canvas>
+		<canvas id="myCanvas"></canvas>
 	</div>
 </body>
 

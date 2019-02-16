@@ -1,3 +1,4 @@
+var CopyWebpackPlugin = require('copy-webpack-plugin');
 module.exports = {
 	entry: './src/index.ts',
 	output: {
@@ -19,7 +20,7 @@ module.exports = {
 			// All files with a '.ts' extension will be handled by 'awesome-typescript-loader'.
 			{
 				test: /\.ts$/,
-				loader: 'awesome-typescript-loader'
+				loader: 'ts-loader'
 			},
 
 			// All output '.js' files will have any sourcemaps re-processed by 'source-map-loader'.
@@ -38,4 +39,12 @@ module.exports = {
 	externals: {
 		'paper': 'paper'
 	},
+
+	// copy paper dependency in dist folder
+	plugins: [
+		new CopyWebpackPlugin([{
+			from: 'node_modules/paper/dist/paper-full.min.js',
+			to: 'libs/paper'
+		}]),
+	]
 };
