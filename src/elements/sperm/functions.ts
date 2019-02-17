@@ -15,6 +15,9 @@ import {
     MIN_SPEED
 } from './constants'
 
+const LEFT = 'LEFT'
+const RIGHT = 'RIGHT'
+
 const createSperm = (): Sperm => {
     project.currentStyle = {
         strokeColor: SPERM_COLOR,
@@ -51,46 +54,50 @@ const createSperm = (): Sperm => {
     let position = center
     let lastRotation = 0
     let count = 0
-
-    const move = () => {}
-
-    const reverse = () => {
-        speed -= 0.3
-        if (speed < minSpeed) speed = minSpeed
-    }
-
-    const left = () => {
-        if (speed >= 0.01) {
-            if (speed < 3 && speed >= 0) {
-                vector.angle -= speed * 2
-            } else if (speed < 0) {
-                vector.angle -= speed / 2
-            } else {
-                vector.angle -= maxSteer * steering
-            }
-            speed *= friction
+    let counter = 0
+    let moveSide = LEFT
+    const acc = 1.5
+    let interval: number = -1
+    let multiplier = -1
+    const handle = (
+        side: string,
+        counter: number,
+        multiplier: number,
+        interval: number
+    ) => () => {
+        counter++
+        if (moveSide !== side || counter === 20) {
+            clearInterval(interval)
+            interval = -1
+        } else {
+            vector.angle =
+                Math.sin((counter * 10 * Math.PI) / 180) * (180 / Math.PI) * multiplier
+            // console.log(vector)
         }
     }
+    const move = () => {
+        moveSide = moveSide === LEFT ? RIGHT : LEFT
+        multiplier = moveSide === LEFT ? -1 : 1
+        counter = 0
 
-    const right = () => {
-        if (speed >= 0.01) {
-            if (speed < 3 && speed >= 0) {
-                vector.angle += speed * 2
-            } else if (speed < 0) {
-                vector.angle += speed / 2
-            } else {
-                vector.angle += maxSteer * steering
-            }
-            speed *= friction
+        /*if (interval) {
+            clearInterval(interval)
+            interval = -1
         }
-    }
+        interval = setInterval(handle(moveSide, 0, multiplier, interval), 30)
+        // vector.angle = vector.angle + maxSteer * steering * multiplier
+        //vector.angle = Math.sin((90 * Math.PI) / 180) * (180 / Math.PI) * multiplier*/
 
-    const forward = () => {
-        speed += 0.3
-        speed = Math.min(maxSpeed, speed)
+        speed += acc
     }
 
     const draw = () => {
+        if (counter < 20) {
+            counter++
+            vector.angle +=
+                Math.sin((counter * 0.5 * Math.PI) / 180) * (180 / Math.PI) * multiplier
+            console.log(vector.angle)
+        }
         const vec = vector.normalize(Math.abs(speed))
         speed = speed * friction
         position = addPoints(vec, position)
@@ -134,10 +141,6 @@ const createSperm = (): Sperm => {
 
     return {
         move: move,
-        left: left,
-        right: right,
-        forward: forward,
-        reverse: reverse,
         draw: draw,
         constrain: constrain
     }

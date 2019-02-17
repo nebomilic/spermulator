@@ -1,9 +1,9 @@
 export const SPERM_COLOR = 'white'
-export const STROKE = 2
+export const STROKE = 4
 export const TAIL_SEGMENT_COUNT = 20
 export const TAIL_PART_LENGTH = 5
-export const HEAD_LENGTH = 13
-export const HEAD_WIDTH = 8
+export const HEAD_LENGTH = 23
+export const HEAD_WIDTH = 15
 export const MIN_SPEED = 1
 export const MAX_SPEED = 5
 export const FRICTION = 0.98

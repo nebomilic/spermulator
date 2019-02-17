@@ -1,16 +1,18 @@
-import { view, setup, KeyEvent, Tool, Key } from 'paper'
+import { view, setup, KeyEvent, Tool, Key, ToolEvent } from 'paper'
 import { Sperm, createSperm } from './elements/sperm'
 
 const onFrame = (sperm: Sperm) => () => {
-    Key.isDown('left') && sperm.left()
-    Key.isDown('right') && sperm.right()
-    Key.isDown('up') && sperm.forward()
-    Key.isDown('down') && sperm.reverse()
     sperm.draw()
 }
 
 const onKeyDown = (sperm: Sperm) => (event: KeyEvent) => {
     event.preventDefault()
+    if (event.key === 'space') sperm.move()
+}
+
+const onMouseDown = (sperm: Sperm) => (event: ToolEvent) => {
+    event.preventDefault()
+    sperm.move()
 }
 
 const begin = () => {
@@ -22,6 +24,7 @@ const begin = () => {
     view.onFrame = onFrame(sperm)
     const tool = new Tool()
     tool.onKeyDown = onKeyDown(sperm)
+    tool.onMouseDown = onMouseDown(sperm)
     tool.activate()
     view.draw()
 }
