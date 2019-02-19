@@ -6,3 +6,4 @@ export const HEAD_LENGTH = 23
 export const HEAD_WIDTH = 15
 export const MIN_SPEED = 1
 export const FRICTION = 0.989
+export const ACCELERATION = 4

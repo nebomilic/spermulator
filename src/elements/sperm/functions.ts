@@ -9,11 +9,35 @@ import {
     HEAD_LENGTH,
     HEAD_WIDTH,
     FRICTION,
-    MIN_SPEED
+    MIN_SPEED,
+    ACCELERATION
 } from './constants'
 
 const LEFT = 'LEFT'
 const RIGHT = 'RIGHT'
+
+const createTail = (): Path => {
+    const size = TAIL_SEGMENT_COUNT
+    const tailPath = new Path()
+    for (let i = 0; i < size; i++) {
+        tailPath.add(
+            new Point(getScreenCenter().x - i * TAIL_PART_LENGTH, getScreenCenter().y)
+        )
+    }
+    return tailPath
+}
+
+const createHead = (): PlacedSymbol => {
+    const headPath = new Path.Ellipse({
+        from: [0, 0],
+        to: [HEAD_LENGTH, HEAD_WIDTH],
+        fillColor: SPERM_COLOR,
+        strokeColor: SPERM_COLOR
+    })
+    return new PlacedSymbol(new Symbol(headPath))
+}
+
+const getScreenCenter = (): Point => view.center
 
 const createSperm = (): Sperm => {
     project.currentStyle = {
@@ -22,41 +46,25 @@ const createSperm = (): Sperm => {
         strokeCap: SPERM_COLOR
     }
 
-    const center = view.center
-    const size = TAIL_SEGMENT_COUNT
-    const partLength = TAIL_PART_LENGTH
-    const tailPath = new Path()
-    for (let i = 0; i < size; i++) {
-        tailPath.add(new Point(center.x - i * partLength, center.y))
-    }
+    const tailPath = createTail()
+    const head = createHead()
 
-    const headPath = new Path.Ellipse({
-        from: [0, 0],
-        to: [HEAD_LENGTH, HEAD_WIDTH],
-        fillColor: SPERM_COLOR,
-        strokeColor: SPERM_COLOR
-    })
-    const head = new PlacedSymbol(new Symbol(headPath))
     const vector = new Point({
         angle: 0,
         length: 20
     })
-    const friction = FRICTION
     let speed = MIN_SPEED
-    let position = center
+    let position = getScreenCenter()
     let lastRotation = 0
     let count = 0
     let rotationCounter = 0
     let moveSide = LEFT
-    const acc = 4
-    let multiplier = -1
     const rotationSteps = 60
 
     const move = () => {
         moveSide = moveSide === LEFT ? RIGHT : LEFT
-        multiplier = moveSide === LEFT ? -1 : 1
         rotationCounter = 0
-        speed += acc
+        speed += ACCELERATION
     }
 
     const draw = () => {
@@ -65,10 +73,10 @@ const createSperm = (): Sperm => {
             vector.angle +=
                 Math.sin((rotationCounter * 0.02 * speed * Math.PI) / 180) *
                 (180 / Math.PI) *
-                multiplier
+                (moveSide === LEFT ? -1 : 1)
         }
         const vec = vector.normalize(Math.abs(speed))
-        speed = speed * friction
+        speed = speed * FRICTION
         position = addPoints(vec, position)
         let lastPoint = (tailPath.firstSegment.point = position)
         let lastVector = vec
@@ -79,7 +87,7 @@ const createSperm = (): Sperm => {
             const rotated = lastVector.rotate(90).normalize(rotLength)
             lastPoint = segment.point = addPoints(
                 lastPoint,
-                lastVector.normalize(-partLength - vec.length / 10)
+                lastVector.normalize(-TAIL_PART_LENGTH - vec.length / 10)
             )
             segment.point = addPoints(segment.point, rotated)
 
