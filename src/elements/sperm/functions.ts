@@ -116,10 +116,13 @@ const createSperm = (): Sperm => {
         }
     }
 
+    const getPath = () => head
+
     return {
         move: move,
         draw: draw,
-        constrain: constrain
+        constrain: constrain,
+        getPath: getPath
     }
 }
 

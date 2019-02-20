@@ -1,8 +1,11 @@
 import { view, setup, KeyEvent, Tool, Key, ToolEvent } from 'paper'
 import { Sperm, createSperm } from './elements/sperm'
+import { createEgg } from './elements/egg/functions'
+import { Egg } from './elements/egg/interfaces'
 
-const onFrame = (sperm: Sperm) => () => {
+const onFrame = (sperm: Sperm, egg: Egg) => () => {
     sperm.draw()
+    egg.check(sperm.getPath())
 }
 
 const onKeyDown = (sperm: Sperm) => (event: KeyEvent) => {
@@ -21,7 +24,8 @@ const begin = () => {
     canvas.height = window.innerHeight
     setup(canvas)
     const sperm = createSperm()
-    view.onFrame = onFrame(sperm)
+    const egg = createEgg()
+    view.onFrame = onFrame(sperm, egg)
     const tool = new Tool()
     tool.onKeyDown = onKeyDown(sperm)
     tool.onMouseDown = onMouseDown(sperm)
