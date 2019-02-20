@@ -20,14 +20,14 @@ const createEgg = (): Egg => {
 
     headPath.position = calcualteSpawnPosition()
 
-    const changePosiiton = () => (headPath.position = calcualteSpawnPosition())
+    const changePosition = () => (headPath.position = calcualteSpawnPosition())
 
     const check = (path: Path) => {
-        headPath.intersects(path) && changePosiiton()
+        headPath.intersects(path) && changePosition()
     }
 
     return {
-        changePosition: changePosiiton,
+        changePosition: changePosition,
         destroy: () => {},
         draw: () => {},
         check: check
